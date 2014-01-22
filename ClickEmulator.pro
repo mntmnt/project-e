@@ -8,8 +8,12 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ClickEmulator
+TARGET = ProjectCE
 TEMPLATE = app
+
+*-g++* {
+QMAKE_CXXFLAGS += -std=gnu++11 #-std=c++0x,gnu++0x
+}
 
 
 SOURCES += main.cpp \
@@ -18,4 +22,5 @@ SOURCES += main.cpp \
 HEADERS  += \
     my_timer.h
 
-#FORMS    += mainwidget.ui
+RESOURCES += \
+    resources.qrc
