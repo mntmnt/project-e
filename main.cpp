@@ -2,50 +2,34 @@
 
 #include "my_timer.h"
 
-#include <QSystemTrayIcon>
-#include <QIcon>
-#include <QMenu>
-
-#include <QDebug>
-
+#include "tray_icon.h"
+#include <QMessageBox>
 int main(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(resources);
+
     QApplication a(argc, argv);
-    QApplication::setQuitOnLastWindowClosed(false);
 
-    QLabel label;
-    label.setText(QObject::tr("ProjectEKA"));
-    label.show();
+    if(TrayIcon::isAvailable()) {
+        QApplication::setQuitOnLastWindowClosed(false);
 
-    MyTimer * t = new MyTimer(&label);
-    t->stop();
+        QLabel label;
+        label.setText(QObject::tr("ProjectEKA"));
+        label.show();
 
-    QIcon icon(":/pics/ghost.png");
-    QSystemTrayIcon tray_icon(icon);
-    QMenu menu(QObject::tr("ProjectCE"));
+        MyTimer * tmr = new MyTimer(&label);
+        tmr->stop();
 
-    {
-        auto act = menu.addAction(QObject::tr("Start"));
-        QObject::connect(act, SIGNAL(triggered()), t, SLOT(start()));
-        QObject::connect(act, &QAction::triggered,[&tray_icon](){
-            tray_icon.setIcon(QIcon(":/pics/pumpkin.png"));
-        });
+        TrayIcon trayico;
 
-        act = menu.addAction(QObject::tr("Stop"));
-        QObject::connect(act, SIGNAL(triggered()), t, SLOT(stop()));
-        QObject::connect(act, &QAction::triggered, [&tray_icon]() {
-            tray_icon.setIcon(QIcon(":/pics/ghost.png"));
-        });
+        QObject::connect(&trayico, SIGNAL(start()), tmr, SLOT(start()));
+        QObject::connect(&trayico, SIGNAL(stop()), tmr, SLOT(stop()));
+        QObject::connect(&trayico, SIGNAL(quit()), qApp, SLOT(quit()));
 
-        menu.addSeparator();
-
-        act = menu.addAction(QObject::tr("Quit"));
-        QObject::connect(act, SIGNAL(triggered()), qApp, SLOT(quit()));
+        trayico.show();
+        return a.exec();
+    } else {
+        QMessageBox::critical(0, "No-Systray", "No system tray available");
+        return 1;
     }
-
-    tray_icon.setContextMenu(&menu);
-    tray_icon.show();
-
-
-    return a.exec();
 }

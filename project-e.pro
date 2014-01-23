@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     send_key_strokes.cpp
 
 HEADERS  += \
-    my_timer.h
+    my_timer.h \
+    tray_icon.h
 
 RESOURCES += \
     resources.qrc
