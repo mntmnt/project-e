@@ -1,9 +1,10 @@
 #include <QApplication>
 
-#include "my_timer.h"
+#include "activity_driver.h"
 
 #include "tray_icon.h"
 #include <QMessageBox>
+
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(resources);
@@ -13,12 +14,20 @@ int main(int argc, char *argv[])
     if(TrayIcon::isAvailable()) {
         QApplication::setQuitOnLastWindowClosed(false);
 
+        ActivityDriver driver;
+        driver.stop();
+        auto tmr = &driver;
+
+        /* == For development purposes = */
         QLabel label;
         label.setText(QObject::tr("ProjectEKA"));
         label.show();
+        int counter = 0;
 
-        MyTimer * tmr = new MyTimer(&label);
-        tmr->stop();
+        QObject::connect(tmr, &ActivityDriver::shot, [&label, &counter]() {
+            label.setText(QString("<b>ProjectEKA<b> - <font color=red>") + QString::number(counter++) + "</font>");
+        });
+        /* == end = */
 
         TrayIcon trayico;
 
