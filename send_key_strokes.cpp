@@ -2,91 +2,50 @@
 
 #include <QDebug>
 
-void sendKeyStrokes() {
+void KeyBDown(const WORD code) {
     INPUT Input = { 0 };
-    // shift key down
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.wVk   = VK_LSHIFT;
-    SendInput( 1, &Input, sizeof( INPUT ) );
 
-    // 'a' key down
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.wVk   = 'A';
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    Input.type = INPUT_KEYBOARD;
+    Input.ki.wVk   = code;
+    SendInput( 1, &Input, sizeof( INPUT ));
+}
 
-    // 'a' key release
-    Input.type       = INPUT_KEYBOARD;
+void KeyBUp(const WORD code) {
+    INPUT Input = { 0 };
+
+    Input.type = INPUT_KEYBOARD;
     Input.ki.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = 'A';
+    Input.ki.wVk   = code;
     SendInput( 1, &Input, sizeof( INPUT ) );
+}
 
-    // shift key release
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = VK_LSHIFT;
-    SendInput( 1, &Input, sizeof( INPUT ) );
+struct KeyClick {
+    WORD cd;
+    KeyClick(const WORD code): cd(code) {
+        KeyBDown(cd);
+    }
 
-    /*X*/
-
-    Input.ki.dwFlags = 0;
-    // 'x' key down
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.wVk   = 'X';
-    SendInput( 1, &Input, sizeof( INPUT ) );
-
-    // 'x' key release
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = 'X';
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    ~KeyClick() {
+        KeyBUp(cd);
+    }
+};
 
 
-    /*E*/
+void KeybClick(const WORD code) {
+    KeyClick click(code);
+}
 
-    Input.ki.dwFlags = 0;
-    // 'e' key down
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.wVk   = 'E';
-    SendInput( 1, &Input, sizeof( INPUT ) );
-
-    // 'e' key release
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = 'E';
-    SendInput( 1, &Input, sizeof( INPUT ) );
-
-    /*l*/
-
-    Input.ki.dwFlags = 0;
-    // 'l' key down
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.wVk   = 'L';
-    SendInput( 1, &Input, sizeof( INPUT ) );
+void KeybClick(const WORD modifier, const WORD code) {
+    KeyClick hold(modifier);
+    KeybClick(code);
+}
 
 
-    // 'l' key release
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = 'L';
-    SendInput( 1, &Input, sizeof( INPUT ) );
+void sendKeyStrokes() {
+    KeybClick(VK_LSHIFT, 'A');
+    KeybClick('X');
+    KeybClick('E');
+    KeybClick('L');
 
-
-    /*SP*/
-    Input.ki.dwFlags = 0;
-    int space = qrand() % 2;
-
-    // 'a' key down
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.wVk   = ( (space == 0) ? VK_SPACE : VK_RETURN );
-    SendInput( 1, &Input, sizeof( INPUT ) );
-
-
-    // 'a' key release
-    Input.type       = INPUT_KEYBOARD;
-    Input.ki.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = ( (space == 0) ? VK_SPACE : VK_RETURN );
-    SendInput( 1, &Input, sizeof( INPUT ) );
-
-
-    qDebug() << "RESULT is " << 0 << "\n";
+    KeybClick(qrand() % 2 == 0 ? VK_SPACE : VK_RETURN);
 }
