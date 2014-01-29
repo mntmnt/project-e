@@ -12,7 +12,7 @@ TARGET = ProjectCE
 TEMPLATE = app
 
 *-g++* {
-QMAKE_CXXFLAGS += -std=gnu++11 #-std=c++0x,gnu++0x
+QMAKE_CXXFLAGS += -std=gnu++11
 }
 
 
