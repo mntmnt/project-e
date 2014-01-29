@@ -24,15 +24,11 @@ public:
         {
             auto act = menu.addAction(tr("Start"));
             QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(start()));
-            QObject::connect(act, &QAction::triggered, [this](){
-                tray_icon.setIcon(active_mode_ico);
-            });
+//            QObject::connect(act, &QAction::triggered, [this](){ tray_icon.setIcon(active_mode_ico); });
 
             act = menu.addAction(tr("Stop"));
             QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(stop()));
-            QObject::connect(act, &QAction::triggered, [this]() {
-                tray_icon.setIcon(inactive_mode_ico);
-            });
+//            QObject::connect(act, &QAction::triggered, [this]() { tray_icon.setIcon(inactive_mode_ico); });
 
             menu.addSeparator();
 
@@ -51,6 +47,14 @@ public slots:
 
     void show() {
         tray_icon.show();
+    }
+
+    void onStart() {
+        tray_icon.setIcon(active_mode_ico);
+    }
+
+    void onStop() {
+        tray_icon.setIcon(inactive_mode_ico);
     }
 
 signals:

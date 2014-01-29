@@ -68,4 +68,13 @@ QString GetForegroundWindowTitle() {
     }
 }
 
+std::size_t IdleTime() {
+     LASTINPUTINFO info = {0};
+
+     if(GetLastInputInfo(&info)) {
+         return info.dwTime;
+     }
+     return 0u;
+}
+
 

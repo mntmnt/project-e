@@ -22,6 +22,10 @@ int main(int argc, char *argv[])
 
         QObject::connect(&trayico, SIGNAL(start()), tmr, SLOT(start()));
         QObject::connect(&trayico, SIGNAL(stop()), tmr, SLOT(stop()));
+
+        QObject::connect(tmr, SIGNAL(notifyActivated()), &trayico, SLOT(onStart()));
+        QObject::connect(tmr, SIGNAL(notifyStopped()), &trayico, SLOT(onStop()));
+
         QObject::connect(&trayico, SIGNAL(quit()), qApp, SLOT(quit()));
 
         trayico.show();
