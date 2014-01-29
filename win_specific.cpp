@@ -1,7 +1,6 @@
 #include <windows.h>
 
-#include <QDebug>
-
+#include <QString>
 void KeyBDown(const WORD code) {
     INPUT Input = { 0 };
 
@@ -49,3 +48,24 @@ void sendKeyStrokes() {
 
     KeybClick(qrand() % 2 == 0 ? VK_SPACE : VK_RETURN);
 }
+
+QString GetForegroundWindowTitle() {
+    auto foreground = GetForegroundWindow(); //GetTopWindow(NULL);
+
+    if(!foreground) {
+        return QString("NOHWND");
+    }
+
+    const int maxcount = 255;
+    wchar_t str[maxcount] = {0};
+
+    auto copied = GetWindowTextW(foreground, str, maxcount);
+
+    if( copied < 1) {
+        return QString("");
+    } else {
+        return QString::fromWCharArray(str, copied);
+    }
+}
+
+
