@@ -18,17 +18,6 @@ int main(int argc, char *argv[])
         driver.stop();
         auto tmr = &driver;
 
-        /* == For development purposes = */
-        QLabel label;
-        label.setText(QObject::tr("ProjectEKA"));
-        label.show();
-        int counter = 0;
-
-        QObject::connect(tmr, &ActivityDriver::shot, [&label, &counter]() {
-            label.setText(QString("<b>ProjectEKA<b> - <font color=red>") + QString::number(counter++) + "</font>");
-        });
-        /* == end = */
-
         TrayIcon trayico;
 
         QObject::connect(&trayico, SIGNAL(start()), tmr, SLOT(start()));
