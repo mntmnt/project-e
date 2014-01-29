@@ -17,7 +17,7 @@ QMAKE_CXXFLAGS += -std=gnu++11 #-std=c++0x,gnu++0x
 
 
 SOURCES += main.cpp \
-    send_key_strokes.cpp
+    win_specific.cpp
 
 HEADERS  += \
     tray_icon.h \
