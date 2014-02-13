@@ -29,7 +29,7 @@ public:
             act = menu.addAction(tr("Stop"));
             QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(stop()));
 
-            act = menu.addAction(tr("10 sec activate"));
+            act = menu.addAction(tr("Auto Mode"));
             QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(activemode()));
 
             menu.addSeparator();

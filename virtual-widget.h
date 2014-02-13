@@ -10,7 +10,7 @@ class VirtualWidget : public QWidget {
 
 public:
 
-    VirtualWidget(): last_input_tick(0u) {
+    VirtualWidget(): last_input_tick(getCurrentMilliseconds()) {
         hide();
     }
 

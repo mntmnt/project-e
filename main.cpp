@@ -17,9 +17,10 @@ int main(int argc, char *argv[])
         QApplication::setQuitOnLastWindowClosed(false);
 
         ActivityDriver driver;
-        driver.stop();
-
         TrayIcon trayico;
+        VirtualWidget input_catcher;
+        input_catcher.activate();
+
 
         QObject::connect(&trayico, SIGNAL(start()), &driver, SLOT(start()));
         QObject::connect(&trayico, SIGNAL(stop()), &driver, SLOT(stop()));
@@ -29,13 +30,12 @@ int main(int argc, char *argv[])
 
         QObject::connect(&trayico, SIGNAL(quit()), qApp, SLOT(quit()));
 
-        trayico.show();
-
-        VirtualWidget input_catcher;
-        input_catcher.activate();
-
         QObject::connect(&input_catcher, SIGNAL(realInput()), &driver, SLOT(stop()));
 
+        driver.stop();
+        trayico.show();
+
+        /* TBD: special driver for automatic mode */
         QTimer autoact;
         QObject::connect(&autoact, &QTimer::timeout, [&input_catcher, &driver]() {
             if(input_catcher.getInactiveTimeMs() > 10000) {
@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
            }
 
         });
+
+        /* == */
 
         return a.exec();
     } else {

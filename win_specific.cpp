@@ -79,16 +79,20 @@ std::size_t getCurrentMilliseconds() {
 bool registerRawInputFor(unsigned int id) {
    HWND hwnd = reinterpret_cast<HWND>(id);
 
-   RAWINPUTDEVICE rd[2];
-   rd[0].usUsage = 6;
-   rd[0].usUsagePage = 1;
-   rd[0].hwndTarget = hwnd;
-   rd[0].dwFlags = RIDEV_INPUTSINK | 0x00002000;
+   const DWORD ridev_devnitify = 0x00002000;
+   const USHORT kbUsage = 6, kbUsagePage = 1;
+   const USHORT mouseUsage = 2, mouseUsagePage = 1;
 
-   rd[1].usUsage = 2;
-   rd[1].usUsagePage = 1;
+   RAWINPUTDEVICE rd[2];
+   rd[0].usUsage = kbUsage;
+   rd[0].usUsagePage = kbUsagePage;
+   rd[0].hwndTarget = hwnd;
+   rd[0].dwFlags = RIDEV_INPUTSINK | ridev_devnitify;
+
+   rd[1].usUsage = mouseUsage;
+   rd[1].usUsagePage = mouseUsagePage;
    rd[1].hwndTarget = hwnd;
-   rd[1].dwFlags = RIDEV_INPUTSINK | 0x00002000; //RIDEV_DEVNOTIFY;
+   rd[1].dwFlags = RIDEV_INPUTSINK | ridev_devnitify;
 
    auto res = RegisterRawInputDevices(rd, 2, sizeof(RAWINPUTDEVICE));
 
@@ -125,7 +129,8 @@ bool processRawInputFor(const QByteArray &, void * message, long * res, std::fun
        return true;
     }
 
-    if(msg->message == 0x00fe) {
+    const UINT plug_unplug_raw_device = 0x00fe;
+    if(msg->message == plug_unplug_raw_device) {
         qDebug() << "PLUG/UNPLUG device";
         return true;
     }

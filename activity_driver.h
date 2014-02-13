@@ -24,7 +24,8 @@ private slots:
 
 public:
    ActivityDriver():activated(false) {
-        timer.setInterval(1000);
+        const int imitate_activity_every = 3000;
+        timer.setInterval(imitate_activity_every);
         timer.stop();
         connect(&timer, SIGNAL(timeout()), this, SLOT(OnShot()));
     }
