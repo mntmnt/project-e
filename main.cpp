@@ -5,7 +5,7 @@
 #include "tray_icon.h"
 #include <QMessageBox>
 
-#include "last-real-activity-catcher.h"
+#include "virtual-widget.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,15 +18,14 @@ int main(int argc, char *argv[])
 
         ActivityDriver driver;
         driver.stop();
-        auto tmr = &driver;
 
         TrayIcon trayico;
 
-        QObject::connect(&trayico, SIGNAL(start()), tmr, SLOT(start()));
-        QObject::connect(&trayico, SIGNAL(stop()), tmr, SLOT(stop()));
+        QObject::connect(&trayico, SIGNAL(start()), &driver, SLOT(start()));
+        QObject::connect(&trayico, SIGNAL(stop()), &driver, SLOT(stop()));
 
-        QObject::connect(tmr, SIGNAL(notifyActivated()), &trayico, SLOT(onStart()));
-        QObject::connect(tmr, SIGNAL(notifyStopped()), &trayico, SLOT(onStop()));
+        QObject::connect(&driver, SIGNAL(notifyActivated()), &trayico, SLOT(onStart()));
+        QObject::connect(&driver, SIGNAL(notifyStopped()), &trayico, SLOT(onStop()));
 
         QObject::connect(&trayico, SIGNAL(quit()), qApp, SLOT(quit()));
 
@@ -35,9 +34,13 @@ int main(int argc, char *argv[])
         VirtualWidget input_catcher;
         input_catcher.activate();
 
+        QObject::connect(&input_catcher, SIGNAL(realInput()), &driver, SLOT(stop()));
+
         QTimer tmr2;
-        QObject::connect(&tmr2, &QTimer::timeout, [&input_catcher]() {
-            qDebug() << "Inactively " << input_catcher.getInactiveTimeMs() << " ms";
+        QObject::connect(&tmr2, &QTimer::timeout, [&input_catcher, &driver]() {
+            if(input_catcher.getInactiveTimeMs() > 10000) {
+               driver.start();
+            }
         });
         tmr2.start(5000);
 

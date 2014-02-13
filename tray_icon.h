@@ -1,5 +1,4 @@
-#ifndef TRAY_ICON_H
-#define TRAY_ICON_H
+#pragma once
 
 #include <QSystemTrayIcon>
 #include <QIcon>
@@ -64,5 +63,3 @@ signals:
     void quit();
 
 };
-
-#endif // TRAY_ICON_H
