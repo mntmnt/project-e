@@ -5,6 +5,8 @@
 #include "tray_icon.h"
 #include <QMessageBox>
 
+#include "last-real-activity-catcher.h"
+
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(resources);
@@ -29,6 +31,16 @@ int main(int argc, char *argv[])
         QObject::connect(&trayico, SIGNAL(quit()), qApp, SLOT(quit()));
 
         trayico.show();
+
+        VirtualWidget input_catcher;
+        input_catcher.activate();
+
+        QTimer tmr2;
+        QObject::connect(&tmr2, &QTimer::timeout, [&input_catcher]() {
+            qDebug() << "Inactively " << input_catcher.getInactiveTimeMs() << " ms";
+        });
+        tmr2.start(5000);
+
         return a.exec();
     } else {
         QMessageBox::critical(0, "No-Systray", "No system tray available");

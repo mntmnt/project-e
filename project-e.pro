@@ -21,7 +21,9 @@ SOURCES += main.cpp \
 
 HEADERS  += \
     tray_icon.h \
-    activity_driver.h
+    activity_driver.h \
+    last-real-activity-catcher.h \
+    win_predefs.h
 
 RESOURCES += \
     resources.qrc
