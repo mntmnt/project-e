@@ -36,13 +36,24 @@ int main(int argc, char *argv[])
 
         QObject::connect(&input_catcher, SIGNAL(realInput()), &driver, SLOT(stop()));
 
-        QTimer tmr2;
-        QObject::connect(&tmr2, &QTimer::timeout, [&input_catcher, &driver]() {
+        QTimer autoact;
+        QObject::connect(&autoact, &QTimer::timeout, [&input_catcher, &driver]() {
             if(input_catcher.getInactiveTimeMs() > 10000) {
                driver.start();
             }
         });
-        tmr2.start(5000);
+        autoact.setInterval(5000);
+
+        QObject::connect(&trayico, &TrayIcon::activemode, [&autoact, &trayico, &driver](){
+           if(autoact.isActive()) {
+               autoact.stop();
+               driver.stop();
+           } else {
+               autoact.start();
+               trayico.onActiveMode();
+           }
+
+        });
 
         return a.exec();
     } else {

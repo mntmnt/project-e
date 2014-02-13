@@ -9,6 +9,7 @@ class TrayIcon : public QObject {
 
     QIcon inactive_mode_ico;
     QIcon active_mode_ico;
+    QIcon waiting_mode_ico;
     QSystemTrayIcon tray_icon;
     QMenu menu;
 
@@ -17,17 +18,19 @@ public:
     TrayIcon():
         inactive_mode_ico(":/pics/ghost.png"),
         active_mode_ico(":/pics/pumpkin.png"),
+        waiting_mode_ico(":/pics/waiting.png"),
         tray_icon(inactive_mode_ico),
         menu(tr("ProjectCE"))
     {
         {
             auto act = menu.addAction(tr("Start"));
             QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(start()));
-//            QObject::connect(act, &QAction::triggered, [this](){ tray_icon.setIcon(active_mode_ico); });
 
             act = menu.addAction(tr("Stop"));
             QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(stop()));
-//            QObject::connect(act, &QAction::triggered, [this]() { tray_icon.setIcon(inactive_mode_ico); });
+
+            act = menu.addAction(tr("10 sec activate"));
+            QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(activemode()));
 
             menu.addSeparator();
 
@@ -56,10 +59,15 @@ public slots:
         tray_icon.setIcon(inactive_mode_ico);
     }
 
+    void onActiveMode() {
+        tray_icon.setIcon(waiting_mode_ico);
+    }
+
 signals:
 
     void start();
     void stop();
+    void activemode();
     void quit();
 
 };

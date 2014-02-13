@@ -35,8 +35,6 @@ public slots:
     void start() {
         if(isActive()) return;
 
-        QTimer::singleShot(3000, this, SLOT(grabActiveWinTitle()));
-
         timer.start();
         activated = true;
 
