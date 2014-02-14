@@ -72,6 +72,10 @@ QString GetForegroundWindowTitle() {
     }
 }
 
+bool isDesktopWindow() {
+    return GetForegroundWindow() == GetDesktopWindow();
+}
+
 std::size_t getCurrentMilliseconds() {
     return GetTickCount();
 }

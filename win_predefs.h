@@ -10,6 +10,8 @@ QString GetForegroundWindowTitle();
 
 std::size_t IdleTime();
 
+bool isDesktopWindow();
+
 
 bool registerRawInputFor(unsigned int);
 

@@ -23,7 +23,8 @@ HEADERS  += \
     tray_icon.h \
     activity_driver.h \
     win_predefs.h \
-    virtual-widget.h
+    virtual-widget.h \
+    auto-driver.h
 
 RESOURCES += \
     resources.qrc
