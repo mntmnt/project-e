@@ -47,12 +47,12 @@ int main(int argc, char *argv[])
         QObject::connect(&trayico, &TrayIcon::activemode, [&autoact, &trayico, &driver](){
            if(autoact.isActive()) {
                autoact.stop();
+               trayico.onPassiveMode();
                driver.stop();
            } else {
                autoact.start();
                trayico.onActiveMode();
            }
-
         });
 
         /* == */

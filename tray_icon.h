@@ -9,7 +9,7 @@ class TrayIcon : public QObject {
 
     QIcon inactive_mode_ico;
     QIcon active_mode_ico;
-    QIcon waiting_mode_ico;
+    QIcon waiting_mode_ico, *current_inactive_mode_ico;
     QSystemTrayIcon tray_icon;
     QMenu menu;
 
@@ -20,6 +20,7 @@ public:
         active_mode_ico(":/pics/pumpkin.png"),
         waiting_mode_ico(":/pics/waiting.png"),
         tray_icon(inactive_mode_ico),
+        current_inactive_mode_ico(&inactive_mode_ico),
         menu(tr("ProjectCE"))
     {
         {
@@ -56,11 +57,17 @@ public slots:
     }
 
     void onStop() {
-        tray_icon.setIcon(inactive_mode_ico);
+        tray_icon.setIcon(*current_inactive_mode_ico);
     }
 
     void onActiveMode() {
-        tray_icon.setIcon(waiting_mode_ico);
+        current_inactive_mode_ico = &waiting_mode_ico;
+        tray_icon.setIcon(*current_inactive_mode_ico);
+    }
+
+    void onPassiveMode() {
+        current_inactive_mode_ico = &inactive_mode_ico;
+        tray_icon.setIcon(*current_inactive_mode_ico);
     }
 
 signals:
