@@ -10,8 +10,9 @@ class TrayIcon : public QObject {
     QIcon inactive_mode_ico;
     QIcon active_mode_ico;
     QIcon waiting_mode_ico, *current_inactive_mode_ico;
-    QSystemTrayIcon tray_icon;
     QMenu menu;
+    QSystemTrayIcon tray_icon;
+    QAction * automatic;
 
 public:
 
@@ -30,8 +31,8 @@ public:
             act = menu.addAction(tr("Stop"));
             QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(stop()));
 
-            act = menu.addAction(tr("Auto Mode"));
-            QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(activemode()));
+            automatic = menu.addAction(tr("Auto Mode"));
+            QObject::connect(automatic, SIGNAL(triggered()), this, SIGNAL(activemode()));
 
             menu.addSeparator();
 
@@ -54,10 +55,12 @@ public slots:
 
     void onStart() {
         tray_icon.setIcon(active_mode_ico);
+        automatic->setEnabled(false);
     }
 
     void onStop() {
         tray_icon.setIcon(*current_inactive_mode_ico);
+        automatic->setEnabled(true);
     }
 
     void onActiveMode() {
