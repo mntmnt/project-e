@@ -3,5 +3,6 @@
         <file>ghost.png</file>
         <file>pumpkin.png</file>
         <file>waiting.png</file>
+        <file>animated_flying_super_penguin.gif</file>
     </qresource>
 </RCC>

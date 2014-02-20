@@ -24,7 +24,8 @@ HEADERS  += \
     activity_driver.h \
     win_predefs.h \
     virtual-widget.h \
-    auto-driver.h
+    auto-driver.h \
+    funny-widg.h
 
 RESOURCES += \
     resources.qrc
