@@ -14,6 +14,12 @@ class TrayIcon : public QObject {
     QSystemTrayIcon tray_icon;
     QAction * automatic;
 
+    enum action_on_activate {
+        show_nothing = 0,
+        show_funny = 1,
+        show_imitation = 2
+    };
+
 public:
 
     TrayIcon():
@@ -26,13 +32,22 @@ public:
     {
         {
             auto act = menu.addAction(tr("Start"));
-            QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(start()));
+            connect(act, SIGNAL(triggered()), this, SIGNAL(start()));
 
             act = menu.addAction(tr("Stop"));
-            QObject::connect(act, SIGNAL(triggered()), this, SIGNAL(stop()));
+            connect(act, SIGNAL(triggered()), this, SIGNAL(stop()));
 
             automatic = menu.addAction(tr("Auto Mode"));
-            QObject::connect(automatic, SIGNAL(triggered()), this, SIGNAL(activemode()));
+            connect(automatic, SIGNAL(triggered()), this, SIGNAL(activemode()));
+
+            menu.addSeparator();
+
+            act = menu.addAction("Funny widget");
+            connect(act, &QAction::triggered, [this]() { emit changeAction( static_cast<int>(show_funny) ); });
+            act = menu.addAction("Imitate");
+            connect(act, &QAction::triggered, [this]() { emit changeAction( static_cast<int>(show_imitation) ); });
+            act = menu.addAction("Show nothing");
+            connect(act, &QAction::triggered, [this]() { emit changeAction( static_cast<int>(show_nothing) ); });
 
             menu.addSeparator();
 
@@ -74,6 +89,8 @@ public slots:
     }
 
 signals:
+
+    void changeAction(int);
 
     void start();
     void stop();

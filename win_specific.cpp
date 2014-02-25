@@ -5,6 +5,8 @@
 #include <functional>
 #include <QDebug>
 
+#include "win_predefs.h"
+
 void KeyBDown(const WORD code) {
     INPUT Input = { 0 };
 
@@ -57,7 +59,11 @@ QString GetForegroundWindowTitle() {
     auto foreground = GetForegroundWindow(); //GetTopWindow(NULL);
 
     if(!foreground) {
-        return QString("NOHWND");
+        return "NOHWND";
+    }
+
+    if(isDesktopWindow()) {
+        return "Desktop :)";
     }
 
     const int maxcount = 255;
@@ -70,6 +76,21 @@ QString GetForegroundWindowTitle() {
     } else {
         return QString::fromWCharArray(str, copied);
     }
+}
+
+QRect GetForegroundWindowSize() {
+    auto foreground = GetForegroundWindow();
+
+    if(!foreground || isDesktopWindow()) {
+        return QRect(0,0,-1,-1);
+    }
+
+    RECT rect;
+    if(GetWindowRect(foreground, &rect) == 0) {
+        return QRect(-1, -1, -1, -1);
+    }
+
+    return QRect(rect.left, rect.top, std::abs(rect.right - rect.left), std::abs(rect.top - rect.bottom));
 }
 
 bool isDesktopWindow() {

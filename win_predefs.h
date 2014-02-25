@@ -3,10 +3,13 @@
 #include <functional>
 
 #include <QString>
+#include <QRect>
 
 void sendKeyStrokes();
 
 QString GetForegroundWindowTitle();
+
+QRect GetForegroundWindowSize();
 
 std::size_t IdleTime();
 

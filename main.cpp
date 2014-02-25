@@ -39,10 +39,11 @@ int main(int argc, char *argv[])
 
         QTimer autoact;
         QObject::connect(&autoact, &QTimer::timeout, [&input_catcher, &driver, &funnywgt]() {
-            if(input_catcher.getInactiveTimeMs() > 60000) {
+            if(input_catcher.getInactiveTimeMs() > 6000) {
                driver.start();
 
-               funnywgt.setWindowTitle(GetForegroundWindowTitle());
+               //if(funnywgt.isHidden())
+               //    funnywgt.setWindowTitle(GetForegroundWindowTitle());
                funnywgt.show();
             }
         });
