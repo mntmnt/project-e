@@ -23,6 +23,10 @@ public:
         return getCurrentMilliseconds() - last_input_tick;
     }
 
+    bool isInactiveIn(std::size_t msecs) {
+        return getInactiveTimeMs() > msecs;
+    }
+
 private:
 
     std::size_t last_input_tick;

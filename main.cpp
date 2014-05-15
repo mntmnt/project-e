@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
         QTimer autoact;
         QObject::connect(&autoact, &QTimer::timeout, [&input_catcher, &driver, &funnywgt]() {
-            if(input_catcher.getInactiveTimeMs() > 5_seconds) {
+            if(input_catcher.isInactiveIn(5_seconds)) {
                driver.start();
 
                funnywgt.setWindowTitle(GetForegroundWindowTitle());

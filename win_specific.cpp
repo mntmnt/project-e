@@ -5,6 +5,11 @@
 #include <functional>
 #include <QDebug>
 
+std::size_t operator "" _seconds(unsigned long long d)
+{
+    return d * 1000;
+}
+
 void KeyBDown(const WORD code) {
     INPUT Input = { 0 };
 
