@@ -31,7 +31,7 @@ public slots:
 
 private slots:
 
-    void onFrameChanged(int i) {
+    void onFrameChanged(int) {
         auto curimg = mov.currentPixmap();
 
         resize(curimg.size());

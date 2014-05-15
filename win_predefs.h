@@ -18,3 +18,9 @@ bool registerRawInputFor(unsigned int);
 bool processRawInputFor(const QByteArray &, void *, long *, std::function<void()>);
 
 std::size_t getCurrentMilliseconds();
+
+std::size_t operator "" _seconds(unsigned long long d)
+{
+    return d * 1000;
+}
+// *User-defined literals
